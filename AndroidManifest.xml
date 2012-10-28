@@ -1,0 +1,57 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.hansinator.lapdroid"
+    android:versionCode="1"
+    android:versionName="0.1" >
+
+    <uses-sdk
+        android:minSdkVersion="9"
+        android:targetSdkVersion="15" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!--
+        <activity
+            androiactivity.DisplayMessageActivityActivity=""
+            android:label="@string/title_activity_display_message" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.hansinator.lapdroid.MainActivity" />
+        </activity>
+        -->
+        <activity
+            android:name=".activity.BastelDetailActivity"
+            android:label="@string/title_activity_bastel_detail" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.LectureDetailActivity"
+            android:label="@string/title_activity_lecture_detail" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.LoungeDetailActivity"
+            android:label="@string/title_activity_lounge_detail" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="activity.MainActivity" />
+        </activity>
+    </application>
+
+</manifest>

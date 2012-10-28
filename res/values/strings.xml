@@ -1,0 +1,17 @@
+<resources>
+
+    <string name="app_name">LAPDroid</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_send">Send!</string>
+    <string name="button_bell">Ring bell!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">LAPDroid</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="title_activity_display_message">My Fucking Message!</string>
+    <string name="title_activity_bastel_detail">Bastelraum</string>
+    <string name="title_activity_lecture_detail">Vortragsraum</string>
+    <string name="title_activity_lounge_detail">Lounge</string>
+
+</resources>

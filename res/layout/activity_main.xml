@@ -1,0 +1,68 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <!--
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/edit_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/edit_message" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="sendMessage"
+            android:text="@string/button_send" />
+    </LinearLayout>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="ringBell"
+        android:text="@string/button_bell" />
+        -->
+
+        <include
+            android:id="@+id/lamp_lounge"
+            layout="@layout/lounge_control" />
+
+        <include
+            android:id="@+id/lamp_lecture"
+            layout="@layout/lecture_control" />
+
+        <include
+            android:id="@+id/lamp_bastel"
+            layout="@layout/bastel_control" />
+
+        <include
+            android:id="@+id/lamp_kitchen"
+            layout="@layout/kitchen_control" />
+
+        <TextView
+            android:id="@+id/power_label"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="5dp"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+</ScrollView>
