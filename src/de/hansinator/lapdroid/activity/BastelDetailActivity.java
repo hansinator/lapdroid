@@ -6,8 +6,8 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import de.hansinator.incubator.BastelControl.BastelStateUpdateListener;
-import de.hansinator.incubator.LightMaster;
+import de.hansinator.automation.lab.LightMaster;
+import de.hansinator.automation.lap.LAPDevice.LAPStateUpdateListener;
 import de.hansinator.lapdroid.R;
 import de.hansinator.lapdroid.lap.Labor;
 
@@ -15,10 +15,10 @@ public class BastelDetailActivity extends Activity implements OnSeekBarChangeLis
 	
 	final int lastPwmVals[] = new int[] { 0, 0, 0 };
 	
-	final BastelStateUpdateListener listener = new BastelStateUpdateListener() {
+	final LAPStateUpdateListener listener = new LAPStateUpdateListener() {
 
 		@Override
-		public void onUpdate(boolean[] switchVals, int[] pwmVals) {
+		public void onUpdate(int key, Object value, Object lastValue) {
 			if (pwmVals[0] != lastPwmVals[0]) {
 				lastPwmVals[0] = pwmVals[0];
 				((SeekBar) findViewById(R.id.bastelDimWindow)).setProgress(pwmVals[0]);

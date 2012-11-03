@@ -1,4 +1,10 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lightList"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+</ListView>
+
+<!-- <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -298,4 +304,4 @@
             android:max="255" />
     </LinearLayout>
 
-</ScrollView>
+</ScrollView>-->

@@ -1,66 +1,100 @@
 package de.hansinator.lapdroid.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import de.hansinator.incubator.LightMaster;
-import de.hansinator.incubator.LoungeDimmer.LoungeStateUpdateListener;
+import android.widget.TextView;
+import de.hansinator.automation.lab.LightMaster;
+import de.hansinator.automation.lap.LAPDevice.LAPStateUpdateListener;
 import de.hansinator.lapdroid.R;
 import de.hansinator.lapdroid.lap.Labor;
 
 public class LoungeDetailActivity extends Activity implements OnSeekBarChangeListener {
 
-	final int lastPwmVals[] = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+	final Integer lastPwmVals[] = new Integer[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 
-	final LoungeStateUpdateListener listenerWall = new LoungeStateUpdateListener() {
+	final boolean lastSwitchVals[] = new boolean[] { false, false, false, false, false, false, false, false };
+	
+	public class LightAdapter extends ArrayAdapter<Integer> {
+		  private final Context context;
+
+		  public LightAdapter(Context context) {
+		    super(context, R.layout.sliderswitch_control, lastPwmVals);
+		    this.context = context;
+		  }
+
+		  @Override
+		  public View getView(int position, View convertView, ViewGroup parent) {
+		    LayoutInflater inflater = (LayoutInflater) context
+		        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		    View rowView = inflater.inflate(R.layout.sliderswitch_control, parent, false);
+		    TextView textView = (TextView) rowView.findViewById(R.id.label);
+		    SeekBar seekBar = (SeekBar) rowView.findViewById(R.id.seekBar);
+		    textView.setText();
+		    seekBar.setProgress(lastPwmVals[position]);
+		    return rowView;
+		  }
+		} 
+
+	private SeekBar decodeSeekbar(int num) {
+		switch (num) {
+		case 0:
+			return (SeekBar) findViewById(R.id.loungeDimSpotWall1);
+		case 1:
+			return (SeekBar) findViewById(R.id.loungeDimSpotWall2);
+		case 2:
+			return (SeekBar) findViewById(R.id.loungeDimSpotWall3);
+		case 3:
+			return (SeekBar) findViewById(R.id.loungeDimNeonWall);
+		case 4:
+			return (SeekBar) findViewById(R.id.loungeDimSpotDoor1);
+		case 5:
+			return (SeekBar) findViewById(R.id.loungeDimSpotDoor2);
+		case 6:
+			return (SeekBar) findViewById(R.id.loungeDimSpotDoor3);
+		case 7:
+			return (SeekBar) findViewById(R.id.loungeDimNeonDoor);
+		default:
+			return null;
+		}
+	}
+
+	final LAPStateUpdateListener listenerWall = new LAPStateUpdateListener() {
 
 		@Override
-		public void onUpdate(boolean[] switchVals, int[] pwmVals) {
-			if (pwmVals[3] != lastPwmVals[0]) {
-				lastPwmVals[0] = pwmVals[3];
-				((SeekBar) findViewById(R.id.loungeDimNeonWall)).setProgress(pwmVals[3]);
+		public void onUpdate(int key, Object value, Object lastValue) {
+			for (int i = 0; i < 4; i++)
+			{
+				if (pwmVals[i] != lastPwmVals[i]) {
+					lastPwmVals[i] = pwmVals[i];
+					decodeSeekbar(i).setProgress(pwmVals[i]);
+				}
+				
+				if(switchVals[i] != lastSwitchVals[i]) {
+					lastSwitchVals[i] = switchVals[i];
+				}
 			}
-			if (pwmVals[0] != lastPwmVals[1]) {
-				lastPwmVals[1] = pwmVals[0];
-				((SeekBar) findViewById(R.id.loungeDimSpotWall1)).setProgress(pwmVals[0]);
-			}
-			if (pwmVals[1] != lastPwmVals[2]) {
-				lastPwmVals[2] = pwmVals[1];
-				((SeekBar) findViewById(R.id.loungeDimSpotWall2)).setProgress(pwmVals[1]);
-			}
-			if (pwmVals[2] != lastPwmVals[3]) {
-				lastPwmVals[3] = pwmVals[2];
-				((SeekBar) findViewById(R.id.loungeDimSpotWall3)).setProgress(pwmVals[2]);
-			}
-
 		}
 	};
 
-	final LoungeStateUpdateListener listenerDoor = new LoungeStateUpdateListener() {
+	final LAPStateUpdateListener listenerDoor = new LAPStateUpdateListener() {
 
 		@Override
-		public void onUpdate(boolean[] switchVals, int[] pwmVals) {
-			if (pwmVals[3] != lastPwmVals[4]) {
-				lastPwmVals[4] = pwmVals[3];
-				((SeekBar) findViewById(R.id.loungeDimNeonDoor)).setProgress(pwmVals[3]);
-			}
-			if (pwmVals[0] != lastPwmVals[5]) {
-				lastPwmVals[5] = pwmVals[0];
-				((SeekBar) findViewById(R.id.loungeDimSpotDoor1)).setProgress(pwmVals[0]);
-			}
-			if (pwmVals[1] != lastPwmVals[6]) {
-				lastPwmVals[6] = pwmVals[1];
-				((SeekBar) findViewById(R.id.loungeDimSpotDoor2)).setProgress(pwmVals[1]);
-			}
-			if (pwmVals[2] != lastPwmVals[7]) {
-				lastPwmVals[7] = pwmVals[2];
-				((SeekBar) findViewById(R.id.loungeDimSpotDoor3)).setProgress(pwmVals[2]);
-			}
+		public void onUpdate(int key, Object value, Object lastValue) {
+			for (int i = 0; i < 4; i++)
+				if (pwmVals[i] != lastPwmVals[i + 4]) {
+					lastPwmVals[i + 4] = pwmVals[i];
+					decodeSeekbar(i + 4).setProgress(pwmVals[i]);
+				}
 		}
 	};
 
