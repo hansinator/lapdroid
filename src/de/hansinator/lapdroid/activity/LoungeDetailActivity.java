@@ -14,54 +14,57 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import de.hansinator.automation.lab.LightMaster;
+import de.hansinator.automation.lab.LoungeDimmer;
 import de.hansinator.automation.lap.LAPDevice.LAPStateUpdateListener;
 import de.hansinator.lapdroid.R;
 import de.hansinator.lapdroid.lap.Labor;
 
 public class LoungeDetailActivity extends Activity implements OnSeekBarChangeListener {
 
-	final Integer lastPwmVals[] = new Integer[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-
-	final boolean lastSwitchVals[] = new boolean[] { false, false, false, false, false, false, false, false };
-	
 	public class LightAdapter extends ArrayAdapter<Integer> {
-		  private final Context context;
+		private final Context context;
 
-		  public LightAdapter(Context context) {
-		    super(context, R.layout.sliderswitch_control, lastPwmVals);
-		    this.context = context;
-		  }
+		public LightAdapter(Context context) {
+			super(context, R.layout.sliderswitch_control, lastPwmVals);
+			this.context = context;
+		}
 
-		  @Override
-		  public View getView(int position, View convertView, ViewGroup parent) {
-		    LayoutInflater inflater = (LayoutInflater) context
-		        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		    View rowView = inflater.inflate(R.layout.sliderswitch_control, parent, false);
-		    TextView textView = (TextView) rowView.findViewById(R.id.label);
-		    SeekBar seekBar = (SeekBar) rowView.findViewById(R.id.seekBar);
-		    textView.setText();
-		    seekBar.setProgress(lastPwmVals[position]);
-		    return rowView;
-		  }
-		} 
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View rowView = inflater.inflate(R.layout.sliderswitch_control, parent, false);
+			TextView textView = (TextView) rowView.findViewById(R.id.label);
+			SeekBar seekBar = (SeekBar) rowView.findViewById(R.id.seekBar);
+			textView.setText();
+			seekBar.setProgress(lastPwmVals[position]);
+			return rowView;
+		}
+	}
 
-	private SeekBar decodeSeekbar(int num) {
-		switch (num) {
-		case 0:
+	private SeekBar decodeSeekbarWall(LoungeDimmer.Objects key) {
+		switch (key) {
+		case pwm_spot1:
 			return (SeekBar) findViewById(R.id.loungeDimSpotWall1);
-		case 1:
+		case pwm_spot2:
 			return (SeekBar) findViewById(R.id.loungeDimSpotWall2);
-		case 2:
+		case pwm_spot3:
 			return (SeekBar) findViewById(R.id.loungeDimSpotWall3);
-		case 3:
+		case pwm_neon:
 			return (SeekBar) findViewById(R.id.loungeDimNeonWall);
-		case 4:
+		default:
+			return null;
+		}
+	}
+
+	private SeekBar decodeSeekbarDoor(LoungeDimmer.Objects key) {
+		switch (key) {
+		case pwm_spot1:
 			return (SeekBar) findViewById(R.id.loungeDimSpotDoor1);
-		case 5:
+		case pwm_spot2:
 			return (SeekBar) findViewById(R.id.loungeDimSpotDoor2);
-		case 6:
+		case pwm_spot3:
 			return (SeekBar) findViewById(R.id.loungeDimSpotDoor3);
-		case 7:
+		case pwm_neon:
 			return (SeekBar) findViewById(R.id.loungeDimNeonDoor);
 		default:
 			return null;
@@ -72,17 +75,9 @@ public class LoungeDetailActivity extends Activity implements OnSeekBarChangeLis
 
 		@Override
 		public void onUpdate(int key, Object value, Object lastValue) {
-			for (int i = 0; i < 4; i++)
-			{
-				if (pwmVals[i] != lastPwmVals[i]) {
-					lastPwmVals[i] = pwmVals[i];
-					decodeSeekbar(i).setProgress(pwmVals[i]);
-				}
-				
-				if(switchVals[i] != lastSwitchVals[i]) {
-					lastSwitchVals[i] = switchVals[i];
-				}
-			}
+			SeekBar sb = decodeSeekbarWall(LoungeDimmer.Objects.values()[key]);
+			if (sb != null)
+				sb.setProgress((Integer) value);
 		}
 	};
 
@@ -90,11 +85,9 @@ public class LoungeDetailActivity extends Activity implements OnSeekBarChangeLis
 
 		@Override
 		public void onUpdate(int key, Object value, Object lastValue) {
-			for (int i = 0; i < 4; i++)
-				if (pwmVals[i] != lastPwmVals[i + 4]) {
-					lastPwmVals[i + 4] = pwmVals[i];
-					decodeSeekbar(i + 4).setProgress(pwmVals[i]);
-				}
+			SeekBar sb = decodeSeekbarDoor(LoungeDimmer.Objects.values()[key]);
+			if (sb != null)
+				sb.setProgress((Integer) value);
 		}
 	};
 

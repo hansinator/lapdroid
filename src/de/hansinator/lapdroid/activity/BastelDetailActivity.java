@@ -6,34 +6,38 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import de.hansinator.automation.lab.BastelControl;
 import de.hansinator.automation.lab.LightMaster;
+import de.hansinator.automation.lab.LoungeDimmer;
 import de.hansinator.automation.lap.LAPDevice.LAPStateUpdateListener;
 import de.hansinator.lapdroid.R;
 import de.hansinator.lapdroid.lap.Labor;
 
 public class BastelDetailActivity extends Activity implements OnSeekBarChangeListener {
-	
-	final int lastPwmVals[] = new int[] { 0, 0, 0 };
-	
+
+	private SeekBar decodeSeekbar(BastelControl.Objects key) {
+		switch (key) {
+		case pwm_window:
+			return (SeekBar) findViewById(R.id.bastelDimWindow);
+		case pwm_banner:
+			return (SeekBar) findViewById(R.id.bastelDimBanner);
+		case pwm_orgatable:
+			return (SeekBar) findViewById(R.id.bastelDimOrgatable);
+		default:
+			return null;
+		}
+	}
+
 	final LAPStateUpdateListener listener = new LAPStateUpdateListener() {
 
 		@Override
 		public void onUpdate(int key, Object value, Object lastValue) {
-			if (pwmVals[0] != lastPwmVals[0]) {
-				lastPwmVals[0] = pwmVals[0];
-				((SeekBar) findViewById(R.id.bastelDimWindow)).setProgress(pwmVals[0]);
-			}
-			if (pwmVals[1] != lastPwmVals[1]) {
-				lastPwmVals[1] = pwmVals[1];
-				((SeekBar) findViewById(R.id.bastelDimBanner)).setProgress(pwmVals[1]);
-			}
-			if (pwmVals[2] != lastPwmVals[2]) {
-				lastPwmVals[2] = pwmVals[2];
-				((SeekBar) findViewById(R.id.bastelDimOrgatable)).setProgress(pwmVals[2]);
-			}
+			SeekBar sb = decodeSeekbar(BastelControl.Objects.values()[key]);
+			if (sb != null)
+				sb.setProgress((Integer) value);
 
 		}
-	}; 
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,17 +50,17 @@ public class BastelDetailActivity extends Activity implements OnSeekBarChangeLis
 		((SeekBar) findViewById(R.id.bastelDimOrgatable)).setOnSeekBarChangeListener(this);
 		((SeekBar) findViewById(R.id.bastelDimWindow)).setOnSeekBarChangeListener(this);
 	}
-	
+
 	@Override
 	protected void onResume() {
 		// install state update listener
 		Labor.getInstance().lm.bastelControl.setListener(listener);
 
-		//request current state
+		// request current state
 		Labor.getInstance().lm.bastelControl.requestState();
 		super.onResume();
 	}
-	
+
 	@Override
 	protected void onPause() {
 		Labor.getInstance().lm.bastelControl.setListener(null);
@@ -124,14 +128,12 @@ public class BastelDetailActivity extends Activity implements OnSeekBarChangeLis
 	public void bastelWindowOff(View view) {
 		Labor.getInstance().lm.bastelControl.switchBastelWindow(false);
 	}
-	
+
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-		if(fromUser)
-		{
+		if (fromUser) {
 			LightMaster lm = Labor.getInstance().lm;
-			switch(seekBar.getId())
-			{
+			switch (seekBar.getId()) {
 			case R.id.bastelDimBanner:
 				lm.bastelControl.dimBastelBanner(seekBar.getProgress());
 				break;

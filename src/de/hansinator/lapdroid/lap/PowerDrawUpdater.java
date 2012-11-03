@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import android.os.Handler;
 import android.widget.TextView;
-import de.hansinator.incubator.PowerMeter.PowerUpdateListener;
+import de.hansinator.automation.lab.PowerMeter.PowerUpdateListener;
 
 public class PowerDrawUpdater implements PowerUpdateListener {
 

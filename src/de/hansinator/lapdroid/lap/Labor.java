@@ -3,11 +3,10 @@ package de.hansinator.lapdroid.lap;
 import java.io.IOException;
 
 import android.util.Log;
-import de.hansinator.incubator.Bell;
-import de.hansinator.incubator.LAPDevice;
-import de.hansinator.incubator.LAPTCPCanGateway;
-import de.hansinator.incubator.LightMaster;
-import de.hansinator.incubator.PowerMeter;
+import de.hansinator.automation.lab.Bell;
+import de.hansinator.automation.lab.LightMaster;
+import de.hansinator.automation.lab.PowerMeter;
+import de.hansinator.automation.lap.LAPTCPCanGateway;
 import de.hansinator.message.bus.MessageBus;
 import de.hansinator.message.net.AsyncWriteMessageProxy;
 import de.hansinator.message.protocol.CANTCPMessage;

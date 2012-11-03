@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import de.hansinator.incubator.LightMaster;
+import de.hansinator.automation.lab.LightMaster;
 import de.hansinator.lapdroid.R;
 import de.hansinator.lapdroid.lap.Labor;
 import de.hansinator.lapdroid.lap.PowerDrawUpdater;
