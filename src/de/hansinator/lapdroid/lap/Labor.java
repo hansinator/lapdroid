@@ -1,15 +1,11 @@
 package de.hansinator.lapdroid.lap;
 
-import java.io.IOException;
-
 import android.util.Log;
 import de.hansinator.automation.lab.Bell;
 import de.hansinator.automation.lab.LightMaster;
 import de.hansinator.automation.lab.PowerMeter;
 import de.hansinator.automation.lap.LAPTCPCanGateway;
 import de.hansinator.message.bus.MessageBus;
-import de.hansinator.message.net.AsyncWriteMessageProxy;
-import de.hansinator.message.protocol.CANTCPMessage;
 import de.hansinator.message.protocol.LAPMessage;
 
 public final class Labor {
@@ -22,15 +18,12 @@ public final class Labor {
 	// messaging bus
 	public final MessageBus<LAPMessage> bus;
 
-	// lap-tcp endpoint
-	AsyncWriteMessageProxy<CANTCPMessage> endpoint;
-
 	// lap-cantcp message gateway
 	public final LAPTCPCanGateway gateway;
 
 	public final LightMaster lm;
-	
-	public final PowerMeter pm; 
+
+	public final PowerMeter pm;
 
 	public final Bell bell;
 
@@ -60,8 +53,9 @@ public final class Labor {
 
 	public synchronized boolean start(int timeout, boolean autoRestart) {
 		Log.v(LNET, "Starting endpoint");
-		boolean ret = gateway.up(timeout, autoRestart);
-		
+		gateway.setAutoConnect(autoRestart);
+		boolean ret = gateway.blockingStart(timeout);
+
 		if (!ret)
 			Log.d(LNET, "Failed to start endpoint");
 		return ret;
@@ -69,10 +63,6 @@ public final class Labor {
 
 	public synchronized void stop() {
 		Log.v(LNET, "Stopping endpoint");
-		try {
-			gateway.disconnect();
-		} catch (IOException e) {
-			Log.d(LNET, "Failed to stop endpoint", e);
-		}
+		gateway.stop();
 	}
 }
