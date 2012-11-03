@@ -75,12 +75,13 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	protected void onPause() {
 		super.onPause();
 		Log.v("main", "onPause");
-		Labor.getInstance().pm.setListener(null);
+		Labor.getInstance().pm.setListener((PowerDrawUpdater)null);
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
+		Log.v("main", "onStop");
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import de.hansinator.automation.lab.BastelControl;
 import de.hansinator.automation.lab.LightMaster;
-import de.hansinator.automation.lab.LoungeDimmer;
 import de.hansinator.automation.lap.LAPDevice.LAPStateUpdateListener;
 import de.hansinator.lapdroid.R;
 import de.hansinator.lapdroid.lap.Labor;

@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import de.hansinator.incubator.LightMaster;
+import de.hansinator.automation.lab.LightMaster;
 import de.hansinator.lapdroid.R;
 import de.hansinator.lapdroid.lap.Labor;
 
