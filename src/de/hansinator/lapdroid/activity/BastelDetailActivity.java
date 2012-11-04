@@ -2,6 +2,7 @@ package de.hansinator.lapdroid.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.SeekBar;
@@ -32,8 +33,11 @@ public class BastelDetailActivity extends Activity implements OnSeekBarChangeLis
 		@Override
 		public void onUpdate(int key, Object value, Object lastValue) {
 			SeekBar sb = decodeSeekbar(BastelControl.Objects.values()[key]);
-			if (sb != null)
+			if (sb != null && !sb.isPressed())
+			{
+				Log.v("bastel","updateSeekbar");
 				sb.setProgress((Integer) value);
+			}
 
 		}
 	};
@@ -41,6 +45,8 @@ public class BastelDetailActivity extends Activity implements OnSeekBarChangeLis
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.v("bastel", "onCreate");
+
 		setContentView(R.layout.activity_bastel_detail);
 		// getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -52,18 +58,26 @@ public class BastelDetailActivity extends Activity implements OnSeekBarChangeLis
 
 	@Override
 	protected void onResume() {
+		super.onResume();
+		Log.v("bastel", "onResume");
+		BastelControl bc = Labor.getInstance().lm.bastelControl;
+
 		// install state update listener
-		Labor.getInstance().lm.bastelControl.setListener(listener);
+		bc.setListener(listener);
+
+		// read current values
+		for (int i = 0; i < 3; i++)
+			decodeSeekbar(BastelControl.Objects.values()[BastelControl.omap_pwm.get((byte)i)]).setProgress(bc.getPwmVals()[i]);
 
 		// request current state
-		Labor.getInstance().lm.bastelControl.requestState();
-		super.onResume();
+		bc.requestState();
 	}
 
 	@Override
 	protected void onPause() {
-		Labor.getInstance().lm.bastelControl.setListener(null);
 		super.onPause();
+		Log.v("bastel", "onPause");
+		Labor.getInstance().lm.bastelControl.setListener(null);
 	}
 
 	@Override
@@ -130,7 +144,7 @@ public class BastelDetailActivity extends Activity implements OnSeekBarChangeLis
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-		if (fromUser) {
+		if (fromUser && seekBar.isPressed()) {
 			LightMaster lm = Labor.getInstance().lm;
 			switch (seekBar.getId()) {
 			case R.id.bastelDimBanner:
